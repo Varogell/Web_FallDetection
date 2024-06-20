@@ -1,0 +1,48 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model SensorData {
+  id          Int                 @id @default(autoincrement())
+  accel_x     Float?
+  accel_y     Float?
+  accel_z     Float?
+  gyro_x      Float?
+  gyro_y      Float?
+  gyro_z      Float?
+  timestamp   DateTime?
+  predictions SensorPredictions[]
+
+  @@map("sensor_data")
+}
+
+model SensorPredictions {
+  id           Int         @id @default(autoincrement())
+  sensorDataId Int?
+  task_t01     Float?
+  task_t06     Float?
+  task_t20     Float?
+  task_t21     Float?
+  task_t22     Float?
+  timestamp    DateTime?
+  sensorData   SensorData? @relation(fields: [sensorDataId], references: [id])
+
+  @@map("sensor_predictions")
+}
+
+model Login {
+  id        Int    @id @default(autoincrement())
+  firstname String
+  lastname  String
+  username  String @unique
+  address   String
+  contact   String
+  city      String
+  state     String
+  password  String
+}
